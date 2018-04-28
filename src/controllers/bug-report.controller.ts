@@ -20,7 +20,14 @@ export class BugReportController {
     private get() {
         this.router.get("/", async (req: Request, res: Response, next: NextFunction) => {
             try {
-                const data = await this.bugReportService.retrieve();
+                const DEFAULT_SORT_BY = "title";
+                const DEFAULT_SORT_TYPE = "asc";
+                const DEFAULT_PAGE = 0;
+                const DEFAULT_PAGE_SIZE = 10;
+
+                const { sort, page = DEFAULT_PAGE, size = DEFAULT_PAGE_SIZE } = req.query;
+                const [sortBy, sortType]  = sort ? sort.split(",") : [DEFAULT_SORT_BY, DEFAULT_SORT_TYPE]; 
+                const data = await this.bugReportService.retrieve(sortBy, sortType, Number(size), Number(page));
                 res.send(data);
             } catch (error) {
                 next(error);

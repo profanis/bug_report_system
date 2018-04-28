@@ -5,7 +5,7 @@
   "main": "dist/src/server.js",
   "author": "Fanis Prodromou",
   "scripts": {
-    "start": "NODE_ENV=development && yarn run build:live",
+    "start": "NODE_ENV=development yarn run build:live",
     "win_start": "set NODE_ENV=development  && yarn run build:live",
     "test": "mocha --reporter spec --require ts-node/register test/**/*.test.ts",
     "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/server.ts",

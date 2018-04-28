@@ -13,8 +13,8 @@ export class BugReportService {
         this.bugReportMapper = new BugReportMapper();
     }
 
-    public async retrieve(): Promise<BugReportPayload[]> {
-        const data = await this.bugReportRepo.getSortedBugs().exec();
+    public async retrieve(sortBy: string, sortType: string, size: number, page: number): Promise<BugReportPayload[]> {
+        const data = await this.bugReportRepo.getSortedBugs(sortBy, sortType, size, page).exec();
         return Promise.resolve(data.map(this.bugReportMapper.toPayload));
     }
 

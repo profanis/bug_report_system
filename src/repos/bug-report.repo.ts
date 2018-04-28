@@ -9,9 +9,11 @@ export class BugReportRepo extends BaseRepo<IBugReport> {
         super(BugReportModel);
     }
 
-    getSortedBugs(): Query<IBugReport[]> {
+    getSortedBugs(sortBy: string, sortType: string, size: number, page: number): Query<IBugReport[]> {
         return this.entity
             .find({})
-            .sort({priority: 1})
+            .sort({ [sortBy]: [sortType] })
+            .skip(size * page)
+            .limit(size);
     }
 }
