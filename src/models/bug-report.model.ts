@@ -7,6 +7,8 @@ export interface IBugReport  {
     priority: number;
     reporter?: string;
     status?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 let bugReportSchema = new Schema(

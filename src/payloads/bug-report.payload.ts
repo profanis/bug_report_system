@@ -5,6 +5,8 @@ export class BugReportPayload {
                 public description: string,
                 public priority: number,
                 public reporter?: string,
-                public status?: string) {
+                public status?: string,
+                public updatedAt?: string,
+                public createdAt?: string) {
     }
 }

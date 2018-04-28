@@ -5,7 +5,14 @@ import { BugReportPayload } from "../payloads/bug-report.payload";
 export class BugReportMapper implements Mapper<IBugReport, BugReportPayload> {
     
     toPayload(entity: IBugReport): BugReportPayload {
-        return new BugReportPayload(entity.id, entity.title, entity.description, entity.priority, entity.reporter, entity.status);
+        return new BugReportPayload(entity.id, 
+                                    entity.title,
+                                    entity.description, 
+                                    entity.priority, 
+                                    entity.reporter, 
+                                    entity.status, 
+                                    entity.updatedAt, 
+                                    entity.createdAt);
     }
 
     toEntity(payload: BugReportPayload): IBugReport {
