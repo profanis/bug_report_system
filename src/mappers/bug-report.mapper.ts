@@ -12,11 +12,12 @@ export class BugReportMapper implements Mapper<IBugReport, BugReportPayload> {
                                     entity.reporter, 
                                     entity.status, 
                                     entity.updatedAt, 
-                                    entity.createdAt);
+                                    entity.createdAt,
+                                    entity.comments);
     }
 
     toEntity(payload: BugReportPayload): IBugReport {
-        const { id, title, description, priority, reporter, status } = payload;
-        return { id, title, description, priority, reporter, status };
+        const { id, title, description, priority, reporter, status, comments } = payload;
+        return { id, title, description, priority, reporter, status, comments };
     }
 }

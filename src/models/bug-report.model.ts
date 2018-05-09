@@ -1,5 +1,10 @@
 import { Document, Model, model, Schema } from "mongoose";
 
+export interface IComments {
+    reporter: string;
+    description: string;
+}
+
 export interface IBugReport  {
     id: string;
     title: string;
@@ -9,6 +14,7 @@ export interface IBugReport  {
     status?: string;
     createdAt?: string;
     updatedAt?: string;
+    comments?: IComments[];
 }
 
 let bugReportSchema = new Schema(
@@ -17,7 +23,11 @@ let bugReportSchema = new Schema(
         description: { type: String, required: true },
         priority: { type: Number, required: true },        
         reporter: String,
-        status: String
+        status: String,
+        comments: [{
+            reporter: { type: String },
+            description: { type: String }
+        }]
     },
     {
         timestamps: true

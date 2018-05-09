@@ -1,3 +1,5 @@
+import { CommentPayload } from "./comments.payload";
+
 export class BugReportPayload {
     
     constructor(public id: string,
@@ -7,6 +9,7 @@ export class BugReportPayload {
                 public reporter?: string,
                 public status?: string,
                 public updatedAt?: string,
-                public createdAt?: string) {
+                public createdAt?: string,
+                public comments?: CommentPayload[]) {
     }
 }
