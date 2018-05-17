@@ -2,6 +2,7 @@ import { Nullable } from "../models/nullable";
 import { BugReportRepo } from "../repos/bug-report.repo";
 import { BugReportMapper } from "../mappers/bug-report.mapper";
 import { BugReportPayload } from "../payloads/bug-report.payload";
+import { BugQueryParamsPayload } from "../payloads/bug-query-params.payload";
 
 export class BugReportService {
 
@@ -13,8 +14,8 @@ export class BugReportService {
         this.bugReportMapper = new BugReportMapper();
     }
 
-    public async retrieve(sortBy: string, sortType: string, size: number, page: number): Promise<BugReportPayload[]> {
-        const data = await this.bugReportRepo.getSortedBugs(sortBy, sortType, size, page).exec();
+    public async retrieve(sortBy: string, sortType: string, size: number, page: number, bugQueryParamsPayload: BugQueryParamsPayload): Promise<BugReportPayload[]> {
+        const data = await this.bugReportRepo.getSortedBugs(sortBy, sortType, size, page, bugQueryParamsPayload).exec();
         return Promise.resolve(data.map(this.bugReportMapper.toPayload));
     }
 

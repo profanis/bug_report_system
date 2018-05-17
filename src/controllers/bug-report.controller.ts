@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 
 import { BugReportService } from "../services/bug-report.service";
+import { BugQueryParamsPayload } from "../payloads/bug-query-params.payload";
 
 export class BugReportController {
     public router: Router;
@@ -27,7 +28,11 @@ export class BugReportController {
 
                 const { sort, page = DEFAULT_PAGE, size = DEFAULT_PAGE_SIZE } = req.query;
                 const [sortBy, sortType]  = sort ? sort.split(",") : [DEFAULT_SORT_BY, DEFAULT_SORT_TYPE]; 
-                const data = await this.bugReportService.retrieve(sortBy, sortType, Number(size), Number(page));
+
+                const bugQueryParamsPayload = new BugQueryParamsPayload();
+                bugQueryParamsPayload.buildFromRequestQuery(req.query);
+
+                const data = await this.bugReportService.retrieve(sortBy, sortType, Number(size), Number(page), bugQueryParamsPayload);
                 res.send(data);
             } catch (error) {
                 next(error);
