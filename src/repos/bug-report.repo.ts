@@ -14,8 +14,8 @@ export class BugReportRepo extends BaseRepo<IBugReport> {
         const filters = [
             bugQueryParamsPayload.title ? { title: { $regex: bugQueryParamsPayload.title, $options: "i" } } : null,
             bugQueryParamsPayload.priority ? { priority: bugQueryParamsPayload.priority } : null,
-            bugQueryParamsPayload.reporter ? { priority: bugQueryParamsPayload.reporter } : null,
-            bugQueryParamsPayload.status ? { priority: bugQueryParamsPayload.status } : null,
+            bugQueryParamsPayload.reporter ? { reporter: bugQueryParamsPayload.reporter } : null,
+            bugQueryParamsPayload.status ? { status: bugQueryParamsPayload.status } : null,
           ].filter(val => val !== null);
 
 
