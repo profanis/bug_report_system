@@ -3,6 +3,8 @@ import { BugReportRepo } from "../repos/bug-report.repo";
 import { BugReportMapper } from "../mappers/bug-report.mapper";
 import { BugReportPayload } from "../payloads/bug-report.payload";
 import { BugQueryParamsPayload } from "../payloads/bug-query-params.payload";
+import { PageablePayload } from "../payloads/pageable.payload";
+import { IBugReport } from "../models/bug-report.model";
 
 export class BugReportService {
 
@@ -14,9 +16,14 @@ export class BugReportService {
         this.bugReportMapper = new BugReportMapper();
     }
 
-    public async retrieve(sortBy: string, sortType: string, size: number, page: number, bugQueryParamsPayload: BugQueryParamsPayload): Promise<BugReportPayload[]> {
-        const data = await this.bugReportRepo.getSortedBugs(sortBy, sortType, size, page, bugQueryParamsPayload).exec();
-        return Promise.resolve(data.map(this.bugReportMapper.toPayload));
+    public async retrieve(sortBy: string, sortType: string, size: number, page: number, bugQueryParamsPayload: BugQueryParamsPayload): Promise<PageablePayload<BugReportPayload>> {
+        const data: PageablePayload<IBugReport> = 
+                await this.bugReportRepo.getSortedBugs(sortBy, sortType, size, page, bugQueryParamsPayload);
+
+        const pageablePayload = 
+                new PageablePayload(data.page, data.perPage, data.totalPages, data.totalRecords, data.results.map(this.bugReportMapper.toPayload));
+        
+        return Promise.resolve(pageablePayload);
     }
 
     public async findById(id: string): Promise<Nullable<BugReportPayload>> {

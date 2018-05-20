@@ -2,6 +2,8 @@ import { NextFunction, Request, Response, Router } from "express";
 
 import { BugReportService } from "../services/bug-report.service";
 import { BugQueryParamsPayload } from "../payloads/bug-query-params.payload";
+import { BugReportPayload } from "../payloads/bug-report.payload";
+import { PageablePayload } from "../payloads/pageable.payload";
 
 export class BugReportController {
     public router: Router;
@@ -32,8 +34,13 @@ export class BugReportController {
                 const bugQueryParamsPayload = new BugQueryParamsPayload();
                 bugQueryParamsPayload.buildFromRequestQuery(req.query);
 
-                const data = await this.bugReportService.retrieve(sortBy, sortType, Number(size), Number(page), bugQueryParamsPayload);
-                res.send(data);
+                const data: PageablePayload<BugReportPayload> = 
+                        await this.bugReportService.retrieve(sortBy, sortType, Number(size), Number(page), bugQueryParamsPayload);
+                res.header("page", data.page.toString())
+                    .header("perPage", data.perPage.toString())
+                    .header("totalPages", data.totalPages.toString())
+                    .header("totalRecords", data.totalRecords.toString())
+                    .send(data.results);
             } catch (error) {
                 next(error);
             }

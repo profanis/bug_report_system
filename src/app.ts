@@ -17,7 +17,7 @@ class App {
 
         this.app = express();
         this.middleware();
-        this.authConfig();        
+        // this.authConfig();        
         this.configureRoutes();
         this.handleOperationalErrors();
     }

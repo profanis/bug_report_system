@@ -3,6 +3,7 @@ import { Query } from "mongoose";
 import { BaseRepo } from "./base.repo";
 import { IBugReport, BugReportModel } from "../models/bug-report.model";
 import { BugQueryParamsPayload } from "../payloads/bug-query-params.payload";
+import { PageablePayload } from "../payloads/pageable.payload";
 
 export class BugReportRepo extends BaseRepo<IBugReport> { 
 
@@ -10,7 +11,11 @@ export class BugReportRepo extends BaseRepo<IBugReport> {
         super(BugReportModel);
     }
 
-    getSortedBugs(sortBy: string, sortType: string, size: number, page: number, bugQueryParamsPayload: BugQueryParamsPayload): Query<IBugReport[]> {
+    async getSortedBugs(sortBy: string, sortType: string, 
+                        size: number, 
+                        page: number, 
+                        bugQueryParamsPayload: BugQueryParamsPayload): Promise<PageablePayload<IBugReport>> {
+
         const filters = [
             bugQueryParamsPayload.title ? { title: { $regex: bugQueryParamsPayload.title, $options: "i" } } : null,
             bugQueryParamsPayload.priority ? { priority: bugQueryParamsPayload.priority } : null,
@@ -23,11 +28,18 @@ export class BugReportRepo extends BaseRepo<IBugReport> {
             $and: [...filters, {}]
         };
 
+        const totalRecords = await this.retrieve().count(filterQuery);
+        const totalPages = Math.ceil(totalRecords / size);
 
-        return this.entity
-            .find(filterQuery)
-            .sort({ [sortBy]: [sortType] })
-            .skip(size * page)
-            .limit(size);
+        const results = await this.entity
+                            .find(filterQuery)
+                            .sort({ [sortBy]: [sortType] })
+                            .skip(size * page)
+                            .limit(size).exec();
+        
+        const pageablePayload = new PageablePayload(page, size, totalPages, totalRecords, results);
+
+        return pageablePayload;
+        
     }
 }
