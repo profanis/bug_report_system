@@ -40,6 +40,7 @@ export class BugReportController {
                     .header("perPage", data.perPage.toString())
                     .header("totalPages", data.totalPages.toString())
                     .header("totalRecords", data.totalRecords.toString())
+                    .header("Access-Control-Expose-Headers", "totalPages, totalRecords, page, perPage")
                     .send(data.results);
             } catch (error) {
                 next(error);
