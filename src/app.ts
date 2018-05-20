@@ -17,6 +17,7 @@ class App {
 
         this.app = express();
         this.middleware();
+        this.authConfig();        
         this.configureRoutes();
         this.handleOperationalErrors();
     }
@@ -30,6 +31,23 @@ class App {
             res.status(500).send(err);
         });
     }
+
+    private authConfig() {
+        this.app.use((req: Request, res: Response, next: NextFunction) => {
+            const token = req.headers["authorization"];
+            if (token === "code.hub.ng5.token") {
+                return next();
+            }
+            
+            return this.authenticationFailed(res);
+        });
+    }
+
+    private authenticationFailed(res: Response) {
+        return res.status(403)
+            .json({ success: false, message: "Authentication failed" });
+    }
+
 
     private middleware(): void {
         this.app.use(bodyParser.json());
