@@ -7,7 +7,6 @@ export class MongoDbConnetion {
 
     public initialize() {
         let uri: string;
-        console.log(process.env.NODE_ENV);
         if (process.env.NODE_ENV === "development") {
             uri = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
             mongoose.set("debug", true);
