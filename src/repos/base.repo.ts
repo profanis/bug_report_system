@@ -1,5 +1,5 @@
+import { Document, Model, Query } from "mongoose";
 import { Nullable } from "../models/nullable";
-import { Document,  Model, Schema, Query } from "mongoose";
 
 export class BaseRepo<T> {
 
@@ -34,7 +34,7 @@ export class BaseRepo<T> {
     }
 
     public delete(id: string): any {
-        return this.entity.remove({ _id: id });
+        return this.entity.findByIdAndRemove(id);
     }
 
 
